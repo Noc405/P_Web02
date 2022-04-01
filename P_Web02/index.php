@@ -78,10 +78,15 @@ class MainController {
 
             $content = $currentPage->display();
 
-            include(dirname(__FILE__) . '/view/head.html');
-            include(dirname(__FILE__) . '/view/menu.php');
-            echo $content;
-            include(dirname(__FILE__) . '/view/footer.html');
+            if($currentPage == new LogUsersController){
+                include(dirname(__FILE__) . '/view/head.php');
+                echo $content;
+            }else{
+                include(dirname(__FILE__) . '/view/head.php');
+                include(dirname(__FILE__) . '/view/menu.php');
+                echo $content;
+                include(dirname(__FILE__) . '/view/footer.php');
+            }
     }
 }
 

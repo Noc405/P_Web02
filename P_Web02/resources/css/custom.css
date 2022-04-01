@@ -1,0 +1,9 @@
+.imagesBooksContent{
+    height: 400px;
+}
+
+@media only screen and (max-width: 991px) {
+    .imagesBooksContent{
+        height: 200px;
+    }
+}

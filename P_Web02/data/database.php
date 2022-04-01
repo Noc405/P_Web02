@@ -8,23 +8,31 @@
  * Date : 28.02.2022
  * Description : Connexion à la base de donnée
  */
+include 'userInfos/userInfos.php';
 
- class Database {
+class Database {
 
 
     // Variable de classe
     private $connector;
-   
+    private $connexionValues;
 
     public function __construct(){
+        //Get the values from the php file for the pdo
+        $connexion = new connexionValues();
+        $this->connexionValues = $connexion->getValues();
 
-        try
-        {
-            $this -> connector = new PDO('mysql:host=localhost;dbname=db_books;charset=utf8,root, root');
-        }
-        catch (PDOException $e)
-        {
-            die('Erreur : ' . $e->getMessage());
+        //Get the value from the json file for the password
+        $Json = file_get_contents("data/userInfos/passwords.json");
+        // Converts to an array 
+        $passwordArray = json_decode($Json, true);
+
+        try {
+            $dns = "mysql:host=".$this->connexionValues['host'].";dbname=".$this->connexionValues['dbname'].";charset=utf8";
+            $this->connector = new PDO($dns, $this->connexionValues['user'], $passwordArray[0]['pass']);
+            // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo "PDOError: " . $e->getMessage()." In ".__FILE__;
         }
     }
 
@@ -47,7 +55,7 @@
 
         $req = $this -> connector->prepare($query);
         foreach($binds as $key => $bind){
-            $req -> bindValue($key,$bind['value'],$bind['type']);
+            $req -> bindValue($key, $bind['value'], $bind['type']);
         }
         $req->execute();
 
@@ -88,7 +96,7 @@
         // TODO: appeler la méthode pour executer la requête
         $rep = $this ->querySimpleExecute($sql);
         // TODO: appeler la méthode pour avoir le résultat sous forme de tableau
-        $$getBookInfo = $this -> formatData($rep);
+        $getBookInfo = $this -> formatData($rep);
         // TODO: retour tous les enseignants
         return $getBookInfo;
     }
@@ -117,83 +125,21 @@
         return $getOneTeacher;
     }
 
-
-    public function addTeacher($gender,$firstname,$lastname,$surname,$origin,$section){
-
+    /**
+     * Insert a user to the database
+     */
+    public function insertUser($email, $password, $username){
+        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        $queryRequest = "INSERT INTO `t_users` (`useEmail`, `usePassword`, `useUsername`, `useAge`)
+        VALUES (:email, :password, :username);";
+        // Set an array with the binds values
         $binds = array(
-            "varName" => array(
-                "value" => $firstname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varSurname" => array(
-                "value" => $surname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varLastname" => array(
-                "value" => $lastname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varOrigin" => array(
-                "value" => $origin,
-                "type" => PDO::PARAM_STR
-            ),
-            "varGender" => array(
-                "value" => $gender,
-                "type" => PDO::PARAM_STR
-            ),
-            "varSection" => array(
-                "value" => $section,
-                "type" => PDO::PARAM_INT
-            )
+            "email" => array("value" => $email, "type" => PDO::PARAM_STR),
+            "password" => array("value" => $password, "type" => PDO::PARAM_STR),
+            "username" => array("value" => $username, "type" => PDO::PARAM_STR),
         );
-
-        $sql ="INSERT INTO t_teacher (teaFirstname, teaName, teaNickname,teaGender, teaOrigine, fkSection)
-        VALUES (:varName, :varLastname, :varSurname,:varGender,:varOrigin,:varSection )";
-
-        // TODO: appeler la méthode pour executer la requête
-        $rep = $this -> queryPrepareExecute($sql, $binds);
-
-        return $rep;
-
+        // Insert the user
+        $this->queryPrepareExecute($queryRequest, $binds);
     }
-
-    public function modifyTeacher($gender,$firstname,$lastname,$surname,$origin,$section){
-
-        $binds = array(
-            "varName" => array(
-                "value" => $firstname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varSurname" => array(
-                "value" => $surname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varLastname" => array(
-                "value" => $lastname,
-                "type" => PDO::PARAM_STR
-            ),
-            "varOrigin" => array(
-                "value" => $origin,
-                "type" => PDO::PARAM_STR
-            ),
-            "varGender" => array(
-                "value" => $gender,
-                "type" => PDO::PARAM_STR
-            ),
-            "varSection" => array(
-                "value" => $section,
-                "type" => PDO::PARAM_INT
-            )
-        );
-
-
-    }
-
-    public function deleteTeacher($id){
-        $sql = "DELETE FROM t_teacher WHERE idTeacher =$id";
-        $rep = $this -> querySimpleExecute($sql);
-    }
-    // + tous les autres méthodes dont vous aurez besoin pour la suite (insertTeacher ... etc)
-
 }
 ?>
