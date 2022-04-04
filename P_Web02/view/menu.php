@@ -22,7 +22,7 @@
                     if(isset($_SESSION['id'])){
                     ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?controller=admin&action=adminInterface">Add a book</a>
+                            <a class="nav-link" href="index.php?controller=books&action=addBooks">Add a book</a>
                         </li>
                     <?php
                     }
@@ -44,7 +44,7 @@
             </div>
             <div class="navbar align-self-center d-flex divTest">
                 <?php
-                if(isset($_SESSION['id'])){
+                if(isset($_SESSION['username'])){
                 ?>
                     <div class="ContentLogout">
                         <span class="nameUserConnected"><?=$_SESSION['username'];?></span>

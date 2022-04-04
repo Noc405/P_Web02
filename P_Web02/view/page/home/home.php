@@ -84,7 +84,7 @@
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="w-100 d-flex justify-content-around my-2 imagesBooksContent">
-                            <a href="#">
+                            <a href="index.php?controller=detailsBook&action=detailOneBook">
                                 <img src="../../../../../P_Web02/P_Web02/resources/booksImage/1.jpg" class="card-img-top" alt="Image of one of the 5 last added books">
                             </a>
                         </div>
@@ -98,7 +98,7 @@
                                     <i class="text-muted fa fa-star"></i>
                                 </li>
                             </ul>
-                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Test</a>
+                            <a href="index.php?controller=detailsBook&action=detailOneBook" class="h2 text-decoration-none text-dark">Test</a>
                             <p class="card-text">
                                 Description
                             </p>

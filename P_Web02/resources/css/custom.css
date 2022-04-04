@@ -1,6 +1,18 @@
 .imagesBooksContent{
     height: 400px;
 }
+.inputForm{
+    width: 205px;
+}
+.inputFormImage{
+    width: 300px;
+}
+
+@media only screen and (max-width: 1010px) {
+    .inputFormImage{
+        width: 200px;
+    }
+}
 
 @media only screen and (max-width: 991px) {
     .imagesBooksContent{

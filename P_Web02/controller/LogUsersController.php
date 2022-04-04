@@ -75,14 +75,37 @@ class LogUsersController extends Controller {
      * @return string
      */
     private function checkLoginAction() {
+        if(isset($_POST['btnSubmit'])){
+            //Get the class Database
+            $database = new Database();
 
-        $view = file_get_contents('view/page/logUsers/logout.php');
+            extract($_POST);
 
-        ob_start();
-        eval('?>' . $view);
-        $content = ob_get_clean();
+            //Check if the user correctly entered the values
+            if(preg_match('/^([a-z]+|\.)+\@[a-z]+\.[a-z]+$/', $email)){
+                $usersFound = $database->getAllUserByEmail($email);
 
-        return $content;
+                if($usersFound){
+                    foreach ($usersFound as $key => $value) {
+                        $hashPass = $usersFound[$key]['usePassword'];
+                        if(password_verify($password, $hashPass)){
+                            $_SESSION['username'] = $usersFound[$key]['useUsername'];
+                            $_SESSION['id'] = $usersFound[$key]['idUser'];
+                            header("Location:index.php?controller=home&action=home");
+                        }else{
+                            //Write an error message if the password is false
+                            header("Location:index.php?controller=log&action=login&error=1");
+                        }
+                    }
+                }else{
+                    //Write a message if none of the email have an account
+                    header("Location:index.php?controller=log&action=login&error=1");
+                }
+            }
+        }else{
+            //Redirect the user to the home page if he can't see the page
+            header("Location:index.php?controller=home&action=home");
+        }
     }
 
     /**
@@ -109,7 +132,7 @@ class LogUsersController extends Controller {
                     $database->insertUser($email, $hashPass, $username);
 
                     //Connect the user
-                    $usersFound = $database->selectUserWithEmail($email);
+                    $usersFound = $database->getAllUserByEmail($email);
 
                     if($usersFound){
                         foreach ($usersFound as $key => $value) {

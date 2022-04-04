@@ -24,7 +24,7 @@
                     }
                     ?>
 
-                    <form method="post" action="index.php?controller=logUsers&action=checkSignin">
+                    <form method="post" action="index.php?controller=log&action=checkSignin">
                         <label for="email" class="mt-4">Email :</label><br>
                         <input type="text" name="email" required><br>
                         <label for="username" class="mt-4">Nom d'utilisateur :</label><br>

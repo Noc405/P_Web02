@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /**
  * ETML
  * Auteur :  Cindy Hardegger
@@ -21,7 +21,7 @@ include_once 'controller/HomeController.php';
 include_once 'controller/BrowseController.php';
 include_once 'controller/DetailsController.php';
 include_once 'controller/LogUsersController.php';
-
+include_once 'controller/BooksController.php';
 
 class MainController {
 
@@ -60,6 +60,9 @@ class MainController {
                 break;
             case 'log':
                 $link = new LogUsersController();
+                break;
+            case 'books':
+                $link = new BooksController();
                 break;
             default:
                 $link = new HomeController();

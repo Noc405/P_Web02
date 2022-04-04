@@ -10,7 +10,7 @@
                         if($_GET['error'] == 1){
                     ?>
                         <div class="w-100 text-center mt-5">
-                            <p class="text-danger">Veuillez renseigner correctement les champs</p>
+                            <p class="text-danger">Le nom d'utilisateur ou le mot de passe est incorrect</p>
                         </div>
                     <?php
                         }
