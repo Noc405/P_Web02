@@ -8,7 +8,7 @@
  * Date : 28.02.2022
  * Description : Connexion à la base de donnée
  */
-include 'userInfos/userInfos.php';
+include_once 'userInfos/userInfos.php';
 
 class Database {
 
@@ -140,6 +140,53 @@ class Database {
         );
         // Insert the user
         $this->queryPrepareExecute($queryRequest, $binds);
+    }
+
+    public function getAllUser(){
+        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        $queryRequest = "SELECT * FROM t_users";
+        // Set an array with the binds values
+       $rep = $this ->querySimpleExecute($queryRequest);
+       // TODO: appeler la méthode pour avoir le résultat sous forme de tableau
+       $getAllUser = $this -> formatData($rep);
+       // TODO: retour tous les enseignants
+       return $getAllUser;
+    }
+
+    public function getAllUserByEmail($email){
+
+        $binds = array(
+            "varemail" => array(
+                "value" => $email,
+                "type" => PDO::PARAM_STR
+            )
+        );
+        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        $queryRequest = "SELECT * FROM t_users WHERE IDlivre = :varId";
+        // Set an array with the binds values
+       $rep = $this ->querySimpleExecute($queryRequest);
+       // TODO: appeler la méthode pour avoir le résultat sous forme de tableau
+       $getAllUser = $this -> formatData($rep);
+       // TODO: retour tous les enseignants
+       return $getAllUser;
+    }
+
+    public function AddComment($remarque){
+
+        $binds = array(
+            "varemail" => array(
+                "value" => $remarque,
+                "type" => PDO::PARAM_STR
+            )
+        );
+        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        $queryRequest = "SELECT * FROM t_users WHERE IDlivre = :varId";
+        // Set an array with the binds values
+       $rep = $this ->querySimpleExecute($queryRequest);
+       // TODO: appeler la méthode pour avoir le résultat sous forme de tableau
+       $getAllUser = $this -> formatData($rep);
+       // TODO: retour tous les enseignants
+       return $getAllUser;
     }
 }
 ?>

@@ -2,7 +2,7 @@
 <html lang="fr">
 
 <head>
-    <title>Smartphones</title>
+    <title>Books</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

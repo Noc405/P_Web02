@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 28 mars 2022 à 15:14
+-- Généré le : lun. 04 avr. 2022 à 08:34
 -- Version du serveur :  5.7.11
 -- Version de PHP : 8.0.1
 
@@ -20,19 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `db_books`
 --
-DROP DATABASE IF EXISTS `db_books`;
-CREATE DATABASE IF NOT EXISTS`db_books`;
-USE `db_books`;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `test`
---
-
-CREATE TABLE `test` (
-  `t_test` int(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -119,6 +106,22 @@ CREATE TABLE `t_editor` (
   `ediName` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `t_editor`
+--
+
+INSERT INTO `t_editor` (`IDeditor`, `ediName`) VALUES
+(1, ' Collins Crime Club'),
+(2, 'Longmans'),
+(3, 'Green & co.'),
+(4, 'William Taylor'),
+(5, ' Bernard Grasset'),
+(6, 'Gallimard'),
+(7, 'Lackington'),
+(8, 'Hughes'),
+(9, 'Harding'),
+(10, 'Mavor et Jones');
+
 -- --------------------------------------------------------
 
 --
@@ -148,9 +151,10 @@ CREATE TABLE `t_livre` (
 CREATE TABLE `t_user` (
   `IDuser` int(11) NOT NULL,
   `useUsername` varchar(20) NOT NULL,
-  `usePassword` varchar(30) NOT NULL,
+  `useMail` varchar(100) NOT NULL,
+  `usePassword` varchar(255) NOT NULL,
   `useVote` int(5) NOT NULL COMMENT 'Nombre de note donnée à des ouvrages',
-  `useDate` date NOT NULL COMMENT 'Date d''entrée dans le site'
+  `useDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date d''entrée dans le site'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -205,13 +209,13 @@ ALTER TABLE `t_author`
 -- AUTO_INCREMENT pour la table `t_category`
 --
 ALTER TABLE `t_category`
-  MODIFY `IDcategory` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `IDcategory` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT pour la table `t_editor`
 --
 ALTER TABLE `t_editor`
-  MODIFY `IDeditor` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDeditor` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `t_livre`

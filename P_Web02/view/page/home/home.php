@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left align-self-center">
-                            <h1 class="h1 text-success1"><b>Nom du site</b> Vente de smartphones</h1>
+                            <h1 class="h1 text-success1"><b>Nom du site</b> Vente de livre</h1>
                             <h3 class="h2">Subtitle</h3>
                             <p>
                                 Text

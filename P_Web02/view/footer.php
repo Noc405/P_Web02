@@ -69,11 +69,11 @@
     <!-- End Footer -->
 
     <!-- Start Script -->
-    <script src="../../../../../P_042-Smartphone/SourceFile/ressources/js/jquery-1.11.0.min.js"></script>
-    <script src="../../../../../P_042-Smartphone/SourceFile/ressources/js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="../../../../../P_042-Smartphone/SourceFile/ressources/js/bootstrap.bundle.min.js"></script>
-    <script src="../../../../../P_042-Smartphone/SourceFile/ressources/js/templatemo.js"></script>
-    <script src="../../../../../P_042-Smartphone/SourceFile/ressources/js/custom.js"></script>
+    <script src="../../../../../P_Web02/P_Web02/resources/js/jquery-1.11.0.min.js"></script>
+    <script src="../../../../../P_Web02/P_Web02/resources/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="../../../../../P_Web02/P_Web02/resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../../../P_Web02/P_Web02/resources/js/templatemo.js"></script>
+    <script src="../../../../../P_Web02/P_Web02/resources/js/custom.js"></script>
     <!-- End Script -->
 </body>
 

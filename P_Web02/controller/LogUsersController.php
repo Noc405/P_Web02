@@ -5,7 +5,7 @@
  * Date: 01.04.2022
  * Controller pour gérer la connexion et l'incription des utilisateur
  */
-include('data/database.php');
+include_once('data/database.php');
 
 class LogUsersController extends Controller {
 
