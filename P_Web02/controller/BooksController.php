@@ -59,8 +59,10 @@ class BooksController extends Controller {
         $database = new Database();
 
         if(isset($_POST['btnSubmit'])){
+            extract($_POST);
 
             $books = $database->getAllBooksName();
+            $database->insertBook($title, "0", $nbPages, "0", $abstract, $date, $author, $category, $editor, $_SESSION['id']);
 
             foreach ($books as $key => $value) {
                 //Check if a book has the same name
