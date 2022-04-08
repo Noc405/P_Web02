@@ -1,9 +1,9 @@
 <?php
 /**
  * ETML
- * Auteur : Cindy Hardegger
- * Date: 22.01.2019
- * Controler pour gérer les pages classiques
+ * Auteur : Emilien Charpié
+ * Date: 08.04.2022
+ * Controller for the home page
  */
 
 class HomeController extends Controller {
@@ -17,7 +17,12 @@ class HomeController extends Controller {
 
         $action = $_GET['action'] . "Action";
 
-        return call_user_func(array($this, $action));
+        // Call a method in this class
+        try {
+            return call_user_func(array($this, $action));
+        } catch (\Throwable $th) {
+            return call_user_func(array($this, "homeAction"));
+        }
     }
 
     /**
@@ -26,13 +31,28 @@ class HomeController extends Controller {
      * @return string
      */
     private function homeAction() {
-
+        // Set the model and get the informations
+        $database = new database();
+        $books = $database->getAllBooks();
+        
+        usort($books, 'DescSort');
+        
+        $_SESSION['allBooks'] = $books;
+        
         $view = file_get_contents('view/page/home/home.php');
-
+        
         ob_start();
         eval('?>' . $view);
         $content = ob_get_clean();
-
+        
         return $content;
     }
+}
+
+// Function for order the books
+function DescSort($firstItem,$secondItem)
+{
+    $firstDatetime = strtotime($firstItem['booAddDate']);
+    $secondDatetime = strtotime($secondItem['booAddDate']);
+    return $secondDatetime - $firstDatetime;
 }

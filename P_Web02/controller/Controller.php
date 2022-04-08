@@ -1,14 +1,14 @@
 <?php
 /**
- * Auteur : Cindy Hardegger
- * Date: 22.01.2019
- * Contrôleur principal
+ * Auteur : Sean Ford
+ * Date: 01.04.2022
+ * Main Controller
  */
 
 abstract class Controller {
 
     /**
-     * Méthode permettant d'appeler l'action 
+     * Method the call the action
      *
      * @return mixed
      */

@@ -3,7 +3,7 @@
  * ETML
  * Auteur : Emilien Charpié
  * Date: 01.04.2022
- * Controller pour gérer la connexion et l'incription des utilisateur
+ * Controller for the login and signin
  */
 include_once('data/database.php');
 
@@ -17,8 +17,12 @@ class LogUsersController extends Controller {
     public function display() {
 
         $action = $_GET['action'] . "Action";
-
-        return call_user_func(array($this, $action));
+        // Call a method in this class
+        try {
+            return call_user_func(array($this, $action));
+        } catch (\Throwable $th) {
+            return call_user_func(array($this, "signinAction"));
+        }
     }
 
     /**

@@ -77,15 +77,23 @@
                 </p>
             </div>
         </div>
+        <?php
+        $books = $_SESSION['allBooks'];
+        ?>
         <div class="row justify-content-around">
         <?php
-        for ($i=0; $i < 5; $i++) { 
+        if(count($books) >= 5){
+            $numberToShow = 5;
+        }else{
+            $numberToShow = count($books);
+        }
+        for ($i=0; $i < $numberToShow; $i++) { 
             ?>
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="w-100 d-flex justify-content-around my-2 imagesBooksContent">
-                            <a href="index.php?controller=detailsBook&action=detailOneBook">
-                                <img src="../../../../../P_Web02/P_Web02/resources/booksImage/1.jpg" class="card-img-top" alt="Image of one of the 5 last added books">
+                            <a href="index.php?controller=detailsBook&action=detailOneBook?idBook=<?=$books[$i]['idBook']?>">
+                                <img src="../../../../../P_Web02/P_Web02/resources/booksImage/<?=$books[$i]['booPicture']?>" class="card-img-top" alt="Image of one of the 5 last added books">
                             </a>
                         </div>
                         <div class="card-body border-top">
@@ -98,9 +106,9 @@
                                     <i class="text-muted fa fa-star"></i>
                                 </li>
                             </ul>
-                            <a href="index.php?controller=detailsBook&action=detailOneBook" class="h2 text-decoration-none text-dark">Test</a>
+                            <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$i]['idBook'];?>" class="h2 text-decoration-none text-dark"><?=$books[$i]['booTitle']?></a>
                             <p class="card-text">
-                                Description
+                                <a href="../../../../../P_Web02/P_Web02/resources/booksExctract/<?=$books[$i]['booExtract'];?>"><?=$books[$i]['booExtract'];?></a>
                             </p>
                             <p class="text-muted">Reviews ($numbers)</p>
                         </div>
@@ -108,6 +116,9 @@
                 </div>
                 <?php
         }
+
+        // Delete the session variable
+        unset($_SESSION['allBooks']);
         ?>
         </div>
     </div>

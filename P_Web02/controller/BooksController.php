@@ -1,9 +1,9 @@
 <?php
 /**
  * ETML
- * Auteur : Cindy Hardegger
- * Date: 22.01.2019
- * Controller for the actions of the books (delete, modify, add, etc..)
+ * Auteur : Emilien Charpié
+ * Date: 08.04.2022
+ * Controller for add the books
  */
 
 include_once ("data/database.php");
@@ -11,7 +11,7 @@ include_once ("data/database.php");
 class BooksController extends Controller {
 
     /**
-     * Permet de choisir l'action à effectuer
+     * Choose the action to do
      *
      * @return mixed
      */
@@ -19,8 +19,12 @@ class BooksController extends Controller {
 
         $action = $_GET['action'] . "Action";
 
-        // Appelle une méthode dans cette classe (ici, ce sera le nom + action (ex: listAction, detailAction, ...))
-        return call_user_func(array($this, $action));
+        // Call a method in this class
+        try {
+            return call_user_func(array($this, $action));
+        } catch (\Throwable $th) {
+            return call_user_func(array($this, "addBooksAction"));
+        }
     }
 
     /**
@@ -59,25 +63,29 @@ class BooksController extends Controller {
         $database = new Database();
 
         if(isset($_POST['btnSubmit'])){
-            extract($_POST);
 
             $books = $database->getAllBooksName();
-            $database->insertBook($title, "0", $nbPages, "0", $abstract, $date, $author, $category, $editor, $_SESSION['id']);
+
+            $bookExists = false;
 
             foreach ($books as $key => $value) {
                 //Check if a book has the same name
                 if($books[$key]['booTitle'] == $_POST['title']){
-                    header("Location:index.php?controller=books&action=addBooks&error=2");
+                    $bookExists = true;
                 }
             }
-            $_SESSION['addedBook'] = $_POST;
-            
-            header("Location:index.php?controller=books&action=addBooksImageAndExtract");
+            if($bookExists){
+                header("Location:index.php?controller=books&action=addBooks&error=2");
+            }else{
+                $_SESSION['addedBook'] = $_POST;
+                
+                header("Location:index.php?controller=books&action=addBooksImageAndExtract");
+            }
         }
     }
 
     /**
-     * Load te page for add the book image and extract
+     * Load the page for add the book image and extract
      *
      * @return string
      */
@@ -120,10 +128,15 @@ class BooksController extends Controller {
                     //Check if the extention is valid
                     if(in_array($extentionUpload, $extentionsValides))
                     {
+                        //Replace the space and the specials chars by the "_"
+                        $pictureName = str_replace(" ", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace("'", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace(":", "_", $_SESSION['addedBook']['title']);
+
                         //Set the path of the file
-                        $path = 'resources/booksImage/'.$bookInfos[0]['idBook'].".".$extentionUpload;
+                        $path = 'resources/booksImage/'.$pictureName.".".$extentionUpload;
                         //Set the picture
-                        $picture = $bookInfos[0]['idBook'].".".$extentionUpload;
+                        $picture = $pictureName.".".$extentionUpload;
                         //Move the file to the path
                         $resultat[0] = move_uploaded_file($_FILES['picture']['tmp_name'], $path);
                     }
@@ -153,10 +166,15 @@ class BooksController extends Controller {
                     //Check if the extention is valid
                     if(in_array($extentionUpload, $extentionsValides))
                     {
+                        //Replace the space and the specials chars by the "_"
+                        $pictureName = str_replace(" ", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace("'", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace(":", "_", $_SESSION['addedBook']['title']);
+
                         //Set the path of the file
-                        $path = 'resources/booksExtract/'.$bookInfos[0]['idBook'].".".$extentionUpload;
+                        $path = 'resources/booksExtract/'.$pictureName.".".$extentionUpload;
                         //Set the PDF
-                        $PDF = $bookInfos[0]['idBook'].".".$extentionUpload;
+                        $PDF = $pictureName.".".$extentionUpload;
                         //Move the file to the path
                         $resultat[1] = move_uploaded_file($_FILES['extract']['tmp_name'], $path);
                     }
@@ -175,10 +193,28 @@ class BooksController extends Controller {
             //If the files have been moved, insert the book in the db
             if($resultat[0] && $resultat[1])
             {
-                //Insert the book
-                $database->insertBook($_SESSION['addedBook']['title'], $picture, $_SESSION['addedBook']['nbPages'],  $PDF, $_SESSION['addedBook']['abstract'], $_SESSION['addedBook']['date'], $_SESSION['addedBook']['author'], $_SESSION['addedBook']['category'], $_SESSION['addedBook']['editor'], $_SESSION['id']);
+                if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\s)+$/', $_SESSION['addedBook']['title']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['addedBook']['nbPages']) && 
+                preg_match('/^.+$/', $_SESSION['addedBook']['abstract']) && 
+                preg_match('/^[0-9]{4}$/', $_SESSION['addedBook']['date']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['addedBook']['author']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['addedBook']['category']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['addedBook']['editor']))
+                {
+                    //Insert the book
+                    $database->insertBook($_SESSION['addedBook']['title'], $picture, $_SESSION['addedBook']['nbPages'], $PDF, $_SESSION['addedBook']['abstract'], $_SESSION['addedBook']['date'], $_SESSION['addedBook']['author'], $_SESSION['addedBook']['category'], $_SESSION['addedBook']['editor'], $_SESSION['id']);
+    
+                    header('Location:index.php?controller=home&action=home');
 
-                header('Location:index.php?controller=home&action=home');
+                    // Unset the variables
+                    unset($_SESSION['addedBook']);
+                    unset($_SESSION['author']);
+                    unset($_SESSION['category']);
+                    unset($_SESSION['editors']);
+                }
+                else{
+                    header("Location:index.php?controller=books&action=addBooks&error=1");
+                }
             }
             else
             {

@@ -1,3 +1,9 @@
+.nameUserConnected{
+    letter-spacing: 1.5px; 
+    margin-right:50px;
+    margin-left: 10px;
+}
+
 .imagesBooksContent{
     height: 400px;
 }
@@ -6,6 +12,12 @@
 }
 .inputFormImage{
     width: 300px;
+}
+
+@media only screen and (max-width: 1220px) {
+    .nameUserConnected{
+        margin-right: 0px;
+    }
 }
 
 @media only screen and (max-width: 1010px) {

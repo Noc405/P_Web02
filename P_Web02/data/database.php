@@ -1,9 +1,6 @@
 <?php
 
-/**
- * 
- * TODO : à compléter
- * 
+/** 
  * Auteur : Sean Ford
  * Date : 28.02.2022
  * Description : Connexion à la base de donnée
@@ -13,7 +10,7 @@ include_once 'userInfos/userInfos.php';
 class Database {
 
 
-    // Variable de classe
+    // Class Variables
     private $connector;
     private $connexionValues;
 
@@ -30,26 +27,24 @@ class Database {
         try {
             $dns = "mysql:host=".$this->connexionValues['host'].";dbname=".$this->connexionValues['dbname'].";charset=utf8";
             $this->connector = new PDO($dns, $this->connexionValues['user'], $passwordArray[0]['pass']);
-            // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connector->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo "PDOError: " . $e->getMessage()." In ".__FILE__;
         }
     }
 
     /**
-     * TODO: à compléter
+     * Do the simple request (without binds)
      */
     private function querySimpleExecute($query){
 
         $req = $this -> connector->prepare($query);
         $req->execute();
         return $req;
-
-        // TODO: permet de préparer et d’exécuter une requête de type simple (sans where)
     }
 
     /**
-     * TODO: à compléter
+     *Do the prepare request (with the binds)
      */
     private function queryPrepareExecute($query, $binds){
 
@@ -60,44 +55,59 @@ class Database {
         $req->execute();
 
         return $req;
-        
-        // TODO: permet de préparer, de binder et d’exécuter une requête (select avec where ou insert, update et delete)
     }
 
     /**
-     * TODO: à compléter
+     * Format the data in a associativ array
      */
     private function formatData($req){
 
         $result = $req->fetchALL(PDO::FETCH_ASSOC);
         return $result;
-
-        // TODO: traiter les données pour les retourner par exemple en tableau associatif (avec PDO::FETCH_ASSOC)
     }
 
     /**
-     * TODO: à compléter
+     * Destory a data
      */
     private function unsetData($req){
 
         $req->closeCursor();
+    }
 
-        // TODO: vider le jeu d’enregistrement
+    /**
+     * Get all the books
+     */
+    public function getAllBooks(){
+        // Get all the books
+        $sql = "SELECT * FROM t_book 
+        INNER JOIN t_author on t_book.fkAuthor = t_author.idAuthor
+        INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
+        INNER JOIN t_category on t_book.fkCategory = t_category.idCategory";
+
+        // Execute the request
+        $rep = $this ->querySimpleExecute($sql);
+        
+        // Format the result to an array
+        $getBookInfo = $this -> formatData($rep);
+
+        // Return the array
+        return $getBookInfo;
     }
 
     /**
      * Get all the name of a book
      */
     public function getAllBooksName(){
-
-        
-        // TODO: avoir la requête sql
+        // Get the books name
         $sql ='SELECT booTitle FROM t_book';
-        // TODO: appeler la méthode pour executer la requête
+
+        // Execute the request
         $rep = $this ->querySimpleExecute($sql);
-        // TODO: appeler la méthode pour avoir le résultat sous forme de tableau
+
+        // Format to an array the returned variable
         $getBookInfo = $this -> formatData($rep);
-        // TODO: retour tous les enseignants
+
+        // Return the array
         return $getBookInfo;
     }
 
@@ -105,7 +115,14 @@ class Database {
      * Get the informations of a book with the id
      */
     public function getBookInfoWithId($id){
+        //Request for get the bok with an id
+        $sql = "SELECT * FROM t_book 
+        INNER JOIN t_author on t_book.fkAuthor = t_author.idAuthor
+        INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
+        INNER JOIN t_category on t_book.fkCategory = t_category.idCategory  
+        WHERE idBook = :varId";
 
+        // Array with the binds values
         $binds = array(
             "varId" => array(
                 "value" => $id,
@@ -113,15 +130,10 @@ class Database {
             )
         );
 
-        $sql = "SELECT * FROM t_book 
-        INNER JOIN t_author on t_book.fkAuthor = t_author.idAuthor
-        INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
-        INNER JOIN t_category on t_book.fkAuthor = t_category.idCategory  
-        WHERE idBook = :varId";
-
-  
+        // Do the prpare request
         $rep = $this -> queryPrepareExecute($sql, $binds);
-
+        
+        // Format to an array the returned variable
         $getOneBook = $this -> formatData($rep);
 
         return $getOneBook;
@@ -131,21 +143,24 @@ class Database {
      * Get the informations of a book with the title
      */
     public function getBookInfoWithTitle($title){
-
+        
+        // Request for get the informations of a book with the title
+        $queryRequest = "SELECT idBook FROM t_book WHERE booTitle = :title";
+        
+        // Array with binds
         $binds = array(
             "title" => array(
                 "value" => $title,
                 "type" => PDO::PARAM_INT
             )
         );
-
-        $queryRequest = "SELECT idBook FROM t_book WHERE booTitle = :title";
-
-  
+        
+        // Do the prpare request
         $rep = $this->queryPrepareExecute($queryRequest, $binds);
-
+        
+        // Format to an array the returned variable
         $getOneBook = $this->formatData($rep);
-
+        
         return $getOneBook;
     }
 
@@ -204,6 +219,9 @@ class Database {
         return $getAllUser;
     }
 
+    /**
+     * Get a user with his email
+     */
     public function getAllUserByEmail($email){
         // Recover id, the username and the password for each user with the email as parameter
         $queryRequest = "SELECT * FROM t_user WHERE useMail = :email";

@@ -2,9 +2,9 @@
 session_start();
 /**
  * ETML
- * Auteur :  Cindy Hardegger
- * Date: 22.01.2019
- * Site web en MVC et orienté objet
+ * Auteur : Emilien Charpié
+ * Date: 08.04.2022
+ * Index of the website
  */
 
 $debug = false;

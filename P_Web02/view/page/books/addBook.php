@@ -36,8 +36,8 @@
                         <input type="number" name="nbPages" class="inputForm" required><br>
                         <label for="abstract" class="mt-4">Résumé :</label><br>
                         <textarea name="abstract" class="inputForm" required></textarea><br>
-                        <label for="date" class="mt-4">Date de sortie du livre :</label><br>
-                        <input type="date" name="date" class="inputForm" required><br>
+                        <label for="date" class="mt-4">Date de sortie du livre : (yyyy)</label><br>
+                        <input type="text" name="date" class="inputForm" required><br>
                         <label for="author" class="mt-4">Auteur :</label><br>
                         <select name="author" class="inputForm" required>
                             <option value="0">Auteur inconnu / autre</option>
