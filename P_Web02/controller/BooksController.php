@@ -222,4 +222,35 @@ class BooksController extends Controller {
             }
         }
     }
+
+    /**
+     * Load the page for confirm delte book
+     *
+     * @return string
+     */
+    private function confirmDeleteAction(){
+        //Charge the view file
+        $view = file_get_contents('view/page/deleteBook/confirmDelete.php');
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+
+        return $content;
+    }
+
+    /**
+     * Load the page for add the book image and extract
+     *
+     * @return string
+     */
+    private function deleteBookAction(){
+        include_once
+        //Charge the view file
+        $view = file_get_contents('view/page/deleteBook/delete.php');
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+
+        return $content;
+    }
 }

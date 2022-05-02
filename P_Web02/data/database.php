@@ -119,7 +119,8 @@ class Database {
         $sql = "SELECT * FROM t_book 
         INNER JOIN t_author on t_book.fkAuthor = t_author.idAuthor
         INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
-        INNER JOIN t_category on t_book.fkCategory = t_category.idCategory  
+        INNER JOIN t_category on t_book.fkCategory = t_category.idCategory
+        INNER JOIN t_user on t_book.fkUser = t_user.idUser  
         WHERE idBook = :varId";
 
         // Array with the binds values
@@ -277,6 +278,22 @@ class Database {
         $getAllEditors = $this -> formatData($rep);
         // return the array
         return $getAllEditors;
+    }
+
+    /**
+     * Delete a book
+    */
+    public function deleteBook($id){
+        // Delete the book that have the same id than $id
+        $queryRequest = "DELETE FROM t_book WHERE 'idBook'= :id";
+        $binds = array (
+            "id" => array(
+                "value" => $id,
+                "type" => PDO::PARAM_INT
+            )
+            );
+        // Execute the request
+        $rep = $this ->queryPrepareExecute($queryRequest, $binds);
     }
 }
 ?>

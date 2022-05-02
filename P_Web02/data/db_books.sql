@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 08 avr. 2022 à 08:40
+-- Généré le : lun. 11 avr. 2022 à 14:12
 -- Version du serveur :  5.7.11
 -- Version de PHP : 8.0.1
 
@@ -101,7 +101,8 @@ INSERT INTO `t_book` (`idBook`, `booTitle`, `booPicture`, `booPage`, `booExtract
 (17, 'Anne de Green Gables', 'GreenGables.jpg', 432, 'GreenGables.pdf', 'Cheveux désespérément roux, visage constellé de taches de rousseur, Anne Shirley est une petite fille curieuse, pleine d\'énergie, souvent perdue dans ses pensées, parfois d\'une gravité solennelle, sans aucun doute intemporelle. Difficile de résister à ce petit bout d\'humanité de onze ans parfaitement imparfaite, héroïne d\'une série de romans qui a su conquérir des millions de lecteurs...', '04.02.2022', '2022-04-08 10:21:00', 12, 33, 15, 1),
 (18, 'Racines', 'Racines.jpg', 750, 'Racines.pdf', 'Lorsque Alex Haley était enfant, sa grand-mère avait coutume de lui raconter des histoires sur sa famille, des histoires qui remontaient à travers les générations jusqu\'à l\'«Africain». Elle disait que cet homme avait vécu de l\'autre côté de l\'Océan et qu\'un jour où il était allé couper un tronc dans la forêt pour se tailler un tambour, quatre hommes l\'avaient assailli, battu, enchaîné et traîné jusqu\'à un bateau d\'esclaves en partance pour l\'Amérique.', '15.03.2000', '2022-04-08 10:21:00', 13, 46, 16, 1),
 (19, 'Les Rois Maudits - Intégrale', 'RoisMaudits.jpg', 1620, 'RoisMaudits.pdf', 'Les Rois maudits est une suite romanesque historique écrite par Maurice Druon avec une équipe de collaborateurs, entre 1955 et 1977, basée sur la légende inventée par le chroniqueur italien Paolo Emilio selon laquelle le dernier grand maître du Temple Jacques de Molay aurait lancé une malédiction sur le bûcher à l\'encontre du roi de France Philippe IV le Bel, du pape Clément V, de Guillaume de Nogaret[1] et de leurs héritiers et descendants pendant treize génération...', '24.08.2005', '2022-04-08 10:21:00', 14, 44, 6, 1),
-(20, 'Récits de la Kolyma', 'Kolyma.jpg', 1760, 'Kolyma.pdf', 'Les Récits de la Kolyma, réunis pour la première fois en français, retracent l\'expérience de Varlam Chalamov dans les camps du Goulag où se sont écoulées dix-sept années de sa vie. Fragments qui doivent se lire comme les chapitres d\'une œuvre unique, un tableau de la Kolyma, ces récits dessinent une construction complexe, qui s\'élabore à travers six recueils', '04.09.2003', '2022-04-08 10:39:00', 15, 46, 17, 1);
+(20, 'Récits de la Kolyma', 'Kolyma.jpg', 1760, 'Kolyma.pdf', 'Les Récits de la Kolyma, réunis pour la première fois en français, retracent l\'expérience de Varlam Chalamov dans les camps du Goulag où se sont écoulées dix-sept années de sa vie. Fragments qui doivent se lire comme les chapitres d\'une œuvre unique, un tableau de la Kolyma, ces récits dessinent une construction complexe, qui s\'élabore à travers six recueils', '04.09.2003', '2022-04-08 10:39:00', 15, 46, 17, 1),
+(22, 'test', 'test.jpg', 123, 'test.pdf', 'qweew', '2022', '2022-04-11 16:11:25', 11, 15, 11, 2);
 
 -- --------------------------------------------------------
 
@@ -209,7 +210,7 @@ INSERT INTO `t_editor` (`idEditor`, `ediName`) VALUES
 CREATE TABLE `t_note` (
   `IDmark` int(11) NOT NULL,
   `notMark` int(11) NOT NULL,
-  `notCommentary` text NOT NULL,
+  `notCommentary` text CHARACTER SET utf8 NOT NULL,
   `fkBook` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -227,6 +228,14 @@ CREATE TABLE `t_user` (
   `useVote` int(5) NOT NULL COMMENT 'Nombre de note donnée à des ouvrages',
   `useDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date d''entrée dans le site'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `t_user`
+--
+
+INSERT INTO `t_user` (`idUser`, `useUsername`, `useMail`, `usePassword`, `useVote`, `useDate`) VALUES
+(1, 'Notte', 'noah.favre@gmail.com', '$2y$10$jLB4baF.KjTY/COKdnjwHOTZo/DJv1dPNPiTQP49vro7c80hIXgPS', 0, '2022-04-11 10:45:53'),
+(2, 'emilien_chrp', 'emilien.charpie@gmail.com', '$2y$10$8WVQ0Km1xRIOONxiPiSsd.JjSVIUR6D.iPdfq2YQdrtHYyQ83diXe', 0, '2022-04-11 15:38:31');
 
 --
 -- Index pour les tables déchargées
@@ -287,7 +296,7 @@ ALTER TABLE `t_author`
 -- AUTO_INCREMENT pour la table `t_book`
 --
 ALTER TABLE `t_book`
-  MODIFY `idBook` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idBook` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT pour la table `t_category`
@@ -311,7 +320,7 @@ ALTER TABLE `t_note`
 -- AUTO_INCREMENT pour la table `t_user`
 --
 ALTER TABLE `t_user`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées

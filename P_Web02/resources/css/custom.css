@@ -13,6 +13,12 @@
 .inputFormImage{
     width: 300px;
 }
+.imageBook{
+    width: 400px;
+}
+.contentButtonDelete button{
+    width: 150px;
+}
 
 @media only screen and (max-width: 1220px) {
     .nameUserConnected{
@@ -29,5 +35,11 @@
 @media only screen and (max-width: 991px) {
     .imagesBooksContent{
         height: 200px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .imageBook{
+        width: 100%;
     }
 }

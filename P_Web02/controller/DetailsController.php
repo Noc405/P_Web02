@@ -1,8 +1,8 @@
 <?php
 /**
  * ETML
- * Auteur : Emilien Charpié
- * Date: 08.04.2022
+ * Auteur : Noah Favre
+ * Date: 11.04.2022
  * Controller for show a book with his details and rate it
  */
 
@@ -41,10 +41,17 @@ class DetailsController extends Controller {
         
         if(isset($_GET['idBook'])){
             $books = $database->getBookInfoWithId($_GET['idBook']);
+
+            //
+            $addDateWithoutHour = substr($books[0]['booAddDate'], 0, -9);
+            $addDateBook = explode('-', $addDateWithoutHour);
+            $books[0]['booAddDate'] = $addDateBook;
+
+            $_SESSION['book'] = $books;
         }
 
         // Charge le fichier pour la vue
-        $view = file_get_contents('view/page/detailsBook/detailsBook.html');
+        $view = file_get_contents('view/page/detailsBook/detailsBook.php');
 
         ob_start();
         eval('?>' . $view);

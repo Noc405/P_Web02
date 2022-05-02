@@ -81,7 +81,7 @@ class MainController {
 
             $content = $currentPage->display();
 
-            if($currentPage == new LogUsersController){
+            if($currentPage == new LogUsersController || $currentPage == new BooksController){
                 include(dirname(__FILE__) . '/view/head.php');
                 echo $content;
             }else{

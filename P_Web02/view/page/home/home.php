@@ -92,8 +92,8 @@
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="w-100 d-flex justify-content-around my-2 imagesBooksContent">
-                            <a href="index.php?controller=detailsBook&action=detailOneBook?idBook=<?=$books[$i]['idBook']?>">
-                                <img src="../../../../../P_Web02/P_Web02/resources/booksImage/<?=$books[$i]['booPicture']?>" class="card-img-top" alt="Image of one of the 5 last added books">
+                            <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$i]['idBook']?>">
+                                <img src="resources/booksImage/<?=$books[$i]['booPicture']?>" class="card-img-top" alt="Image of one of the 5 last added books">
                             </a>
                         </div>
                         <div class="card-body border-top">

@@ -105,10 +105,12 @@ class LogUsersController extends Controller {
                     //Write a message if none of the email have an account
                     header("Location:index.php?controller=log&action=login&error=1");
                 }
+            }else{
+                header("Location:index.php?controller=log&action=login&error=1");
             }
         }else{
             //Redirect the user to the home page if he can't see the page
-            header("Location:index.php?controller=home&action=home");
+            header("Location:index.php?controller=log&action=login&error=1");
         }
     }
 
