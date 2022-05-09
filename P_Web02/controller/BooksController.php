@@ -27,6 +27,69 @@ class BooksController extends Controller {
         }
     }
 
+    
+    /**
+     * Get the form to add a new book
+     *
+     * @return string
+     */
+    private function editBookAction() {
+        $database = new Database();
+        //Get all the authors
+        $authors = $database->getAllAuthors();
+        //Get all the category
+        $categories = $database->getAllCategories();
+        //Get all the Editors                   
+        $editors = $database->getAllEditors(); 
+        // Get book info 
+        if(isset($_GET['idBook'])){
+            $books = $database->getBookInfoWithId($_GET['idBook']);
+        }
+
+        //Set the session variables
+        $_SESSION['authors'] = $authors;
+        $_SESSION['categories'] = $categories;
+        $_SESSION['editors'] = $editors;
+        $_SESSION['bookInfos'] = $books;
+
+        //Charge the view file
+        $view = file_get_contents('view/page/books/editBook.php');
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+
+        return $content;
+    }
+
+    /**
+     * Check the book informations for edit it
+     *
+     */
+    private function checkEditBookAction(){
+        $database = new Database();
+
+        if(isset($_POST['btnSubmit'])){
+            $_SESSION['addedBook'] = $_POST;
+            
+            header("Location:index.php?controller=books&action=editBooksImageAndExtract");
+        }
+    }
+
+        /**
+     * Load the page for add the book image and extract
+     *
+     * @return string
+     */
+    private function editBooksImageAndExtractAction(){
+        //Charge the view file
+        $view = file_get_contents('view/page/books/addBookImageAndExtract.php');
+        ob_start();
+        eval('?>' . $view);
+        $content = ob_get_clean();
+
+        return $content;
+    }
+
     /**
      * Get the form to add a new book
      *
