@@ -22,6 +22,7 @@ include_once 'controller/BrowseController.php';
 include_once 'controller/DetailsController.php';
 include_once 'controller/LogUsersController.php';
 include_once 'controller/BooksController.php';
+include_once 'controller/VoteController.php';
 
 class MainController {
 
@@ -63,6 +64,9 @@ class MainController {
                 break;
             case 'books':
                 $link = new BooksController();
+                break;
+            case 'vote':
+                $link = new VoteController();
                 break;
             default:
                 $link = new HomeController();

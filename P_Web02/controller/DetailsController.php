@@ -48,6 +48,21 @@ class DetailsController extends Controller {
             $books[0]['booAddDate'] = $addDateBook;
 
             $_SESSION['book'] = $books;
+
+            $allNote = $database->getAllNote($_GET['idBook']);
+            
+            if($allNote){
+                $nbComment = 0;
+                $sommeMarks = 0;
+                foreach ($allNote as $key => $value) {
+                    $nbComment += 1;
+                    $sommeMarks += $allNote[$key]['notMark'];
+                }
+                $average = $sommeMarks / $nbComment;
+    
+                $_SESSION['average'] = $average;
+                $_SESSION['nbComments'] = $nbComment;
+            }
         }
 
         // Charge le fichier pour la vue

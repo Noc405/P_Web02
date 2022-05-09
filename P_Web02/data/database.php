@@ -281,16 +281,54 @@ class Database {
     }
 
     /**
+     * Show note
+    */
+    public function getAllNote($id){
+        // Vote the book that have the same id than $id
+        $queryRequest = "SELECT * FROM t_note WHERE fkBook = :id";
+        // Set an array with the binds values
+        $binds = array(
+            "id" => array(
+                "value" => $id,
+                "type" => PDO::PARAM_INT)
+        );
+        // Execute the request
+        $rep = $this ->queryPrepareExecute($queryRequest, $binds);
+        //Set an array with the query return
+        $getAllNote = $this -> formatData($rep);
+        // return the array
+        return $getAllNote;
+    }
+
+    /**
      * Delete a book
     */
     public function deleteBook($id){
         // Delete the book that have the same id than $id
         $queryRequest = "DELETE FROM t_book WHERE 'idBook'= :id";
+        // Set an array with the binds values
         $binds = array (
             "id" => array(
                 "value" => $id,
-                "type" => PDO::PARAM_INT
-            )
+                "type" => PDO::PARAM_INT)
+            );
+        // Execute the request
+        $rep = $this ->queryPrepareExecute($queryRequest, $binds);
+    }
+
+    /**
+     * Vote a book
+    */
+    public function voteBook($mark, $commentary, $id){
+        // Vote the book that have the same id than $id
+        $queryRequest = "INSERT INTO t_note (notMark, notCommentary, fkBook) 
+        VALUES (:mark, :commentary, :id)";
+
+        // Set an array with the binds values
+        $binds = array (
+            "mark" => array("value" => $mark, "type" => PDO::PARAM_INT),
+            "commentary" => array("value" => $commentary, "type" => PDO::PARAM_STR),
+            "id" => array("value" => $id,"type" => PDO::PARAM_INT)
             );
         // Execute the request
         $rep = $this ->queryPrepareExecute($queryRequest, $binds);
