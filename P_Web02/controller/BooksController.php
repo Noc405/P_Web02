@@ -19,7 +19,7 @@ class BooksController extends Controller {
 
         $action = $_GET['action'] . "Action";
 
-        // Call a method in this class
+        //Call a method in this class
         try {
             return call_user_func(array($this, $action));
         } catch (\Throwable $th) {
@@ -69,25 +69,172 @@ class BooksController extends Controller {
         $database = new Database();
 
         if(isset($_POST['btnSubmit'])){
-            $_SESSION['addedBook'] = $_POST;
-            
-            header("Location:index.php?controller=books&action=editBooksImageAndExtract");
+            $_SESSION['editedBook'] = $_POST;
+            unset($_SESSION['bookInfos']);
+
+            header("Location:index.php?controller=books&action=editBooksImageAndExtract&idBook=".$_GET['idBook']);
         }
     }
 
-        /**
+    /**
      * Load the page for add the book image and extract
      *
      * @return string
      */
     private function editBooksImageAndExtractAction(){
         //Charge the view file
-        $view = file_get_contents('view/page/books/addBookImageAndExtract.php');
+        $view = file_get_contents('view/page/books/editBookImageAndExtract.php');
         ob_start();
         eval('?>' . $view);
         $content = ob_get_clean();
 
         return $content;
+    }
+
+    /**
+     * Check the image and extract books
+     *
+     * @return string
+     */
+    private function checkEditBookImagesAndExtractAction(){
+        $database = new Database();
+        if(isset($_POST['btnSubmit'])){
+            //Check if the user set the picture file
+            if(isset($_FILES['picture']) && !empty($_FILES['picture']['name']))
+            {
+                //Set the max size and the good extentions
+                $maxSize = 2097152;
+                $extentionsValides = array('jpg', 'jpeg', 'gif', 'png');
+
+                //Check if the uploaded file have the good size
+                if($_FILES['picture']['size'] <= $maxSize)
+                {
+                    //Get the extention of the uploaded fil 
+                    $extentionUpload = strtolower(substr(strrchr($_FILES['picture']['name'], '.'), 1));
+                    //Check if the extention is valid
+                    if(in_array($extentionUpload, $extentionsValides))
+                    {
+                        //Replace the space and the specials chars by the "_"
+                        $pictureName = str_replace(" ", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace("'", "_", $_SESSION['addedBook']['title']);
+                        $pictureName = str_replace(":", "_", $_SESSION['addedBook']['title']);
+
+                        //Set the path of the file
+                        $path = 'resources/booksImage/'.$pictureName.".".$extentionUpload;
+                        //Set the picture
+                        $picture = $pictureName.".".$extentionUpload;
+                        //Move the file to the path
+                        $resultat[0] = move_uploaded_file($_FILES['picture']['tmp_name'], $path);
+                    }
+                    else
+                    {
+                        //Picture as not the good extention
+                    }
+                }
+                else
+                {
+                    //Picture is to fat
+                }
+            }
+
+            //Check if the user set the pdf fil 
+            if(isset($_FILES['extract']) && !empty($_FILES['extract']['name']))
+            {
+                //Set the max size and the good extentions
+                $maxSize = 2097152;
+                $extentionsValides = array('pdf');
+
+                //Check if the uploaded file have the good size
+                if($_FILES['extract']['size'] <= $maxSize)
+                {
+                    //Get the extention of the uploaded fil 
+                    $extentionUpload = strtolower(substr(strrchr($_FILES['extract']['name'], '.'), 1));
+                    //Check if the extention is valid
+                    if(in_array($extentionUpload, $extentionsValides))
+                    {
+                        //Replace the space and the specials chars by the "_"
+                        $PDFName = str_replace(" ", "_", $_SESSION['addedBook']['title']);
+                        $PDFName = str_replace("'", "_", $_SESSION['addedBook']['title']);
+                        $PDFName = str_replace(":", "_", $_SESSION['addedBook']['title']);
+
+                        //Set the path of the file
+                        $path = 'resources/booksExtract/'.$PDFName.".".$extentionUpload;
+                        //Set the PDF
+                        $PDF = $PDFName.".".$extentionUpload;
+                        //Move the file to the path
+                        $resultat[1] = move_uploaded_file($_FILES['extract']['tmp_name'], $path);
+                    }
+                    else
+                    {
+                        //PDF has not the good extention
+                    }
+                }
+                else
+                {
+                    //PDF is too fat
+                }
+            }
+
+            if(isset($resultat)){
+                //If the files have been moved, insert the book in the db
+                if($resultat[0] || $resultat[1])
+                {
+                    if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\s|\'|.)+$/', $_SESSION['editedBook']['title']) && 
+                    preg_match('/^[0-9]+$/', $_SESSION['editedBook']['nbPages']) && 
+                    preg_match('/^.+$/', $_SESSION['editedBook']['abstract']) && 
+                    preg_match('/^[0-9]{4}$/', $_SESSION['editedBook']['date']) && 
+                    preg_match('/^[0-9]+$/', $_SESSION['editedBook']['author']) && 
+                    preg_match('/^[0-9]+$/', $_SESSION['editedBook']['category']) && 
+                    preg_match('/^[0-9]+$/', $_SESSION['editedBook']['editor']))
+                    {
+                        $pdfAndPicture = $database->getBookInfoWithId($_GET['idBook']);
+                        if(isset($picture) && isset($PDF)){
+                            //Edit the book
+                            $database->editBook($_SESSION['editedBook']['title'], $picture, $_SESSION['editedBook']['nbPages'], $PDF, $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
+                        }elseif(isset($picture)){
+                            //Edit the book
+                            $database->editBook($_SESSION['editedBook']['title'], $picture, $_SESSION['editedBook']['nbPages'], $pdfAndPicture[0]['booExtract'], $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
+                        }elseif(isset($PDF)){
+                            //Edit the book
+                            $database->editBook($_SESSION['editedBook']['title'], $pdfAndPicture[0]['booPicture'], $_SESSION['editedBook']['nbPages'], $PDF, $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
+                        }
+    
+                        // Unset the variables
+                        unset($_SESSION['editedBook']);
+                        unset($_SESSION['authors']);
+                        unset($_SESSION['categories']);
+                        unset($_SESSION['editors']);
+                        
+                        header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=".$_GET['idBook']);
+                    }else{
+                        header("Location:index.php?controller=books&action=editBook&idBook=".$_GET['idBook']."&error=1");
+                    }
+                }
+            }else{
+                if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\ |\'|.)+$/', $_SESSION['editedBook']['title']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['editedBook']['nbPages']) && 
+                preg_match('/^.+$/', $_SESSION['editedBook']['abstract']) && 
+                preg_match('/^[0-9]{4}$/', $_SESSION['editedBook']['date']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['editedBook']['author']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['editedBook']['category']) && 
+                preg_match('/^[0-9]+$/', $_SESSION['editedBook']['editor']))
+                {
+                    $pdfAndPicture = $database->getBookInfoWithId($_GET['idBook']);
+                    $database->editBook($_SESSION['editedBook']['title'], $pdfAndPicture[0]['booPicture'], $_SESSION['editedBook']['nbPages'], $pdfAndPicture[0]['booExtract'], $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
+    
+                    // Unset the variables
+                    unset($_SESSION['editedBook']);
+                    unset($_SESSION['authors']);
+                    unset($_SESSION['categories']);
+                    unset($_SESSION['editors']);
+    
+                    header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=".$_GET['idBook']);
+                }else{
+                    header("Location:index.php?controller=books&action=editBook&idBook=".$_GET['idBook']."&error=1");
+                }
+            }
+
+        }
     }
 
     /**
@@ -256,7 +403,7 @@ class BooksController extends Controller {
             //If the files have been moved, insert the book in the db
             if($resultat[0] && $resultat[1])
             {
-                if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\s)+$/', $_SESSION['addedBook']['title']) && 
+                if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\s|.)+$/', $_SESSION['addedBook']['title']) && 
                 preg_match('/^[0-9]+$/', $_SESSION['addedBook']['nbPages']) && 
                 preg_match('/^.+$/', $_SESSION['addedBook']['abstract']) && 
                 preg_match('/^[0-9]{4}$/', $_SESSION['addedBook']['date']) && 
@@ -302,18 +449,18 @@ class BooksController extends Controller {
     }
 
     /**
-     * Load the page for add the book image and extract
-     *
-     * @return string
+     * Delete the book and redirect the user to the home page or redirect the user to the details of the book
      */
     private function deleteBookAction(){
-        include_once
-        //Charge the view file
-        $view = file_get_contents('view/page/deleteBook/delete.php');
-        ob_start();
-        eval('?>' . $view);
-        $content = ob_get_clean();
+        if(isset($_POST['btnDelete'])){
+            $database = new Database();
+    
+            $database->deleteBook($_GET['idBook']);
 
-        return $content;
+            header("Location:index.php?controller=home&action=home");
+
+        }elseif(isset($_POST['btnBack'])){
+            header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=" . $_GET['idBook']);
+        }
     }
 }

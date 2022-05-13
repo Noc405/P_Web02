@@ -3,7 +3,7 @@
             <div class="card mb-4 product-wap rounded-0">
                 <div class="card-body text-center">
                     <i class="fa fa-fw fa-book text-dark mr-1 text-success1"></i>
-                    <h3 class="text-success1">Ajouter un livre</h1>
+                    <h3 class="text-success1">Editer un livre</h1>
                     
                     <?php
                     if(isset($_GET['error'])){
@@ -13,12 +13,6 @@
                             <p class="text-danger">Veuillez renseigner correctement les champs</p>
                         </div>
                     <?php
-                        }elseif($_GET['error'] == 2){
-                            ?>
-                        <div class="w-100 text-center mt-5">
-                            <p class="text-danger">Ce livre existe déjà</p>
-                        </div>
-                            <?php
                         }
                     }
                     ?>
@@ -31,7 +25,7 @@
 
                     ?>
 
-                    <form method="post" action="index.php?controller=books&action=checkEditBook">
+                    <form method="post" action="index.php?controller=books&action=checkEditBook&idBook=<?=$_GET['idBook'];?>">
                         <label for="title" class="mt-4">Titre :</label><br>
                         <input type="text" name="title" class="inputForm" value="<?=$bookInfos[0]['booTitle'];?>" required><br>
                         <label for="nbPages" class="mt-3">Nombre de pages : </label><br>
@@ -98,7 +92,7 @@
                     <br>
                 </div>
                 <div class="w-100 text-center mb-5">
-                    <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$bookInfos[0]['idBook']?>" class="text-decoration-none text-success2"><strong>Retour à la page du livre</strong></a>
+                    <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$_GET['idBook']?>" class="text-decoration-none text-success2"><strong>Retour à la page du livre</strong></a>
                 </div>
             </div>
         </div>

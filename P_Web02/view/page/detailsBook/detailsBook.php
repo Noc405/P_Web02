@@ -1,7 +1,6 @@
  <!-- Open Content -->
- <?php
- $book = $_SESSION['book'];
-
+<?php
+    $book = $_SESSION['book'];
 ?>
  <section class="bg-light">
     <div class="container pb-5">
@@ -17,14 +16,24 @@
                     <div class="card-body">
                         <h1 class="h2"><?=$book[0]['booTitle']?></h1>
                         <p class="h3 py-2">Total de page : <?=$book[0]['booPage']?></p>
+                        <?php
+                        if(isset($_SESSION['average']) && isset($_SESSION['nbComments'])){
+                        ?>
                         <p class="py-2">
                             <i class="fa fa-star text-warning"></i>
+                            <!-- <i class="fa fa-star text-warning"></i>
                             <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <span class="list-inline-item text-dark">Rating 4.8 | 36 Comments</span>
+                            <i class="fa fa-star-half text-warning"></i>
+                            <i class="fa fa-star text-secondary"></i> -->
+                            <span class="list-inline-item text-dark">Rating <?=$_SESSION['average'];?> | <?=$_SESSION['nbComments'];?> Comments | <a href="index.php?controller=vote&action=voteBook&idBook=<?=$book[0]['idBook'];?>">Noter ce livre</a></span>
                         </p>
+                        <?php
+                        }else{
+                            ?>
+                            <span class="list-inline-item text-dark">Pas de notes à ce livre | <a href="index.php?controller=vote&action=voteBook&idBook=<?=$book[0]['idBook'];?>">Noter ce livre</a></span>
+                            <?php
+                        }
+                        ?>
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <h6>Catégorie : <?=$book[0]['catName']?></h6>
@@ -32,7 +41,7 @@
                         </ul>
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <h6>Sorti le :</h6>
+                                <h6>Sorti en :</h6>
                             </li>
                             <li class="list-inline-item">
                                 <p><?=$book[0]['booDate']?></p>
@@ -49,8 +58,8 @@
                             <li>Ajouté sur le site le : <?=$book[0]['booAddDate'][2] . " du " . $book[0]['booAddDate'][1] . " " . $book[0]['booAddDate'][0]?></li>
                             <li>Par l'utilisateur : <?=$book[0]['useUsername']?></li>
                         </ul>
-                        <a href="../../P_Web02/P_Web02/resources/booksExctract/<?=$book[0]['booExtract'];?>">Lire un extrait</a>
-                        <div class="row pb-3">
+                        <a class="mb-5" href="../../P_Web02/P_Web02/resources/booksExtract/<?=$book[0]['booExtract'];?>">Lire un extrait</a>
+                        <div class="row pb-3 mt-5">
                             <div class="col d-grid">
                                 <button type="submit" class="btn btn-success btn-lg" name="submit" value="edit" onclick="window.location.href = 'index.php?controller=books&action=editBook&idBook=<?=$book[0]['idBook']?>';">Éditer</button>
                             </div>

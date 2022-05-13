@@ -121,6 +121,7 @@ class Database {
         INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
         INNER JOIN t_category on t_book.fkCategory = t_category.idCategory
         INNER JOIN t_user on t_book.fkUser = t_user.idUser  
+        -- INNER JOIN t_note on t_note.fkBook = t_book.idBook
         WHERE idBook = :varId";
 
         // Array with the binds values
@@ -166,6 +167,31 @@ class Database {
     }
 
     /**
+     * Get the informations of a book with the title
+     */
+    public function getBookNotes($idBook){
+        
+        // Request for get the informations of a book with the title
+        $queryRequest = "SELECT * FROM t_note WHERE fkBook = :idBook";
+        
+        // Array with binds
+        $binds = array(
+            "idBook" => array(
+                "value" => $idBook,
+                "type" => PDO::PARAM_INT
+            )
+        );
+        
+        // Do the prpare request
+        $rep = $this->queryPrepareExecute($queryRequest, $binds);
+        
+        // Format to an array the returned variable
+        $getOneBook = $this->formatData($rep);
+        
+        return $getOneBook;
+    }
+
+    /**
      * Insert a book to the database
      */
     public function insertBook($title, $picture, $nbPage, $extract, $abstract, $date, $author, $categroy, $editor, $idUser){
@@ -184,6 +210,47 @@ class Database {
             "category" => array("value" => $categroy, "type" => PDO::PARAM_INT),
             "editor" => array("value" => $editor, "type" => PDO::PARAM_INT),
             "idUser" => array("value" => $idUser, "type" => PDO::PARAM_INT)
+        );
+        // Insert the book
+        $this->queryPrepareExecute($queryRequest, $binds);
+
+        //Get the user that add the book
+        $user = $this->getUserById($idUser);
+
+        //Set the useAddBookNb attribute in t_user
+        $queryRequest = "UPDATE t_user 
+        SET useAddBookNb=:nbBook
+        WHERE idUser=:id";
+
+        // Set an array with the binds values
+        $binds = array (
+            "id" => array("value" => $userId,"type" => PDO::PARAM_INT),
+            "nbBook" => array("value" => $user[0]['useAddBookNb'] + 1,"type" => PDO::PARAM_INT)
+            );
+        // Execute the request
+        $this ->queryPrepareExecute($queryRequest, $binds);
+    }
+
+    /**
+     * Edit a book to the database
+     */
+    public function editBook($title, $picture, $nbPage, $extract, $abstract, $date, $author, $categroy, $editor, $idBook){
+        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        $queryRequest = "UPDATE `t_book` 
+        SET `booTitle`=:title, `booPicture`=:picture, `booPage`=:nbPage, `booExtract`=:extract, `booAbstract`=:abstract, `booDate`=:date, `fkAuthor`=:author, `fkCategory`=:category, `fkEditor`=:editor
+        WHERE idBook=:id";
+        // Set an array with the binds values
+        $binds = array(
+            "title" => array("value" => $title, "type" => PDO::PARAM_STR),
+            "picture" => array("value" => $picture, "type" => PDO::PARAM_STR),
+            "nbPage" => array("value" => $nbPage, "type" => PDO::PARAM_INT),
+            "extract" => array("value" => $extract, "type" => PDO::PARAM_STR),
+            "abstract" => array("value" => $abstract, "type" => PDO::PARAM_STR),
+            "date" => array("value" => $date, "type" => PDO::PARAM_STR),
+            "author" => array("value" => $author, "type" => PDO::PARAM_INT),
+            "category" => array("value" => $categroy, "type" => PDO::PARAM_INT),
+            "editor" => array("value" => $editor, "type" => PDO::PARAM_INT),
+            "id" => array("value" => $idBook, "type" => PDO::PARAM_INT)
         );
         // Insert the user
         $this->queryPrepareExecute($queryRequest, $binds);
@@ -242,6 +309,28 @@ class Database {
     }
 
     /**
+     * Get a user with his Id
+     */
+    public function getUserById($id){
+        // Recover id, the username and the password for each user with the email as parameter
+        $queryRequest = "SELECT * FROM t_user WHERE idUser = :id";
+        // Set an array with the binds values
+        $binds = array(
+            "id" => array(
+                "value" => $id,
+                "type" => PDO::PARAM_INT
+            )
+        );
+        //Execute the request
+        $rep = $this->queryPrepareExecute($queryRequest, $binds);
+        //Set an array with the result
+        $getAUser = $this->formatData($rep);
+        //Return an array
+        return $getAUser;
+    }
+
+
+    /**
      * Get all the authors
      */
     public function getAllAuthors(){
@@ -285,15 +374,49 @@ class Database {
     */
     public function deleteBook($id){
         // Delete the book that have the same id than $id
-        $queryRequest = "DELETE FROM t_book WHERE 'idBook'= :id";
+        $queryRequest = "DELETE FROM t_book WHERE idBook=:id";
+        // Set an array with the binds values
         $binds = array (
             "id" => array(
                 "value" => $id,
-                "type" => PDO::PARAM_INT
-            )
+                "type" => PDO::PARAM_INT)
             );
         // Execute the request
-        $rep = $this ->queryPrepareExecute($queryRequest, $binds);
+        $rep = $this->queryPrepareExecute($queryRequest, $binds);
+    }
+
+    /**
+     * Vote a book
+    */
+    public function voteBook($mark, $commentary, $id, $userId){
+        // Vote the book that have the same id than $id
+        $queryRequest = "INSERT INTO t_note (notMark, notCommentary, fkBook) 
+        VALUES (:mark, :commentary, :id)";
+
+        // Set an array with the binds values
+        $binds = array (
+            "mark" => array("value" => $mark, "type" => PDO::PARAM_INT),
+            "commentary" => array("value" => $commentary, "type" => PDO::PARAM_STR),
+            "id" => array("value" => $id,"type" => PDO::PARAM_INT)
+            );
+        // Execute the request
+        $this ->queryPrepareExecute($queryRequest, $binds);
+
+        //Get the user that vote the book
+        $user = $this->getUserById($userId);
+
+        //Set the useVote attribute in t_user
+        $queryRequest = "UPDATE t_user 
+        SET useVote=:vote
+        WHERE idUser=:id";
+
+        // Set an array with the binds values
+        $binds = array (
+            "id" => array("value" => $userId,"type" => PDO::PARAM_INT),
+            "vote" => array("value" => $user[0]['useVote'] + 1,"type" => PDO::PARAM_INT)
+            );
+        // Execute the request
+        $this ->queryPrepareExecute($queryRequest, $binds);
     }
 }
 ?>
