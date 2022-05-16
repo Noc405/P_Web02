@@ -35,6 +35,10 @@ class MainController {
             $_GET['controller'] = 'home';
             $_GET['action'] = 'home';
         }
+        //Problem with the template, redirect to a page with correct header
+        if(isset($_GET['q'])){
+            header("Location:index.php?controller=books&action=searchBook&search=".$_GET['q']);
+        }
 
 
         $currentLink = $this->menuSelected($_GET['controller']);

@@ -26,7 +26,6 @@ class BooksController extends Controller {
             return call_user_func(array($this, "addBooksAction"));
         }
     }
-
     
     /**
      * Get the form to add a new book
@@ -455,7 +454,9 @@ class BooksController extends Controller {
         if(isset($_POST['btnDelete'])){
             $database = new Database();
     
-            $database->deleteBook($_GET['idBook']);
+            if(isset($_GET['idBook'])){
+                $database->deleteBook($_GET['idBook']);
+            }
 
             header("Location:index.php?controller=home&action=home");
 
@@ -463,4 +464,24 @@ class BooksController extends Controller {
             header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=" . $_GET['idBook']);
         }
     }
+
+    private function searchBookAction(){
+        
+        $database = new Database();
+
+        if(isset($_GET['search'])){
+            $books = $database->searchBook($_GET['search']);
+            $_SESSION['allBooks'] = $books;
+
+            //Charge the view file
+            $view = file_get_contents('view/page/browse/list.php');
+            ob_start();
+            eval('?>' . $view);
+            $content = ob_get_clean();
+
+            return $content;
+        }else{
+            header("Location:index.php?controller=home&action=home");
+        }
+      }
 }

@@ -418,5 +418,21 @@ class Database {
         // Execute the request
         $this ->queryPrepareExecute($queryRequest, $binds);
     }
+
+    /**
+     * Search a book
+    */
+    public function searchBook($search){
+        // Vote the book that have the same id than $id
+        $queryRequest = "SELECT * FROM t_book WHERE booTitle = :search";
+
+        // Set an array with the binds values
+        $binds = array (
+            "search" => array("value" => "%$search%", "type" => PDO::PARAM_STR)
+        );
+
+        // Execute the request
+        $books = $this ->queryPrepareExecute($queryRequest, $binds);
+    }
 }
 ?>
