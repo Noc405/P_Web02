@@ -20,6 +20,11 @@
     width: 150px;
 }
 
+.abstract{
+    text-align: justify;
+    padding-right: 50px;
+}
+
 @media only screen and (max-width: 1220px) {
     .nameUserConnected{
         margin-right: 0px;

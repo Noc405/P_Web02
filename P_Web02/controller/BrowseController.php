@@ -33,11 +33,24 @@ class BrowseController extends Controller {
      * @return string
      */
     private function listBookAction() {
-        // Set the model and get the informations
         $database = new database();
-        $books = $database->getAllBooks();
-        $_SESSION['allBooks'] = $books;
 
+        if(isset($_GET['search'])){
+            //Get the information of the searched book
+            $books = $database->searchBook(htmlspecialchars($_GET['search']));
+        }else{            
+            //Get the informations of all books
+            $books = $database->getAllBooks();
+        }
+        $_SESSION['allBooks'] = $books;
+        
+        //Get the number of the reviews
+        foreach ($books as $key => $value) { 
+            $notes = $database->getBookNotes($books[$key]['idBook']);
+            $_SESSION['numberComments'][$key] = count($notes);
+        }
+        
+        
         // Load the view file
         $view = file_get_contents('view/page/browse/list.php');
 

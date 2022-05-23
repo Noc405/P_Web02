@@ -13,11 +13,10 @@
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left align-self-center">
-                            <h1 class="h1 text-success1"><b>Nom du site</b> Vente de livre</h1>
-                            <h3 class="h2">Subtitle</h3>
+                            <h1 class="h1 text-success1"><b>Books & co</b></h1>
+                            <h3 class="h2">Découvrez nos livres</h3>
                             <p>
-                                Text
-                                <a rel="sponsored" class="text-success1" href="#" target="_blank">Lien</a>.
+                                <a rel="sponsored" class="text-success1" href="index.php?controller=browse&action=listBook" target="_blank">Ici</a>.
                             </p>
                         </div>
                     </div>
@@ -32,11 +31,10 @@
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
-                            <h1 class="h1">Title</h1>
-                            <h3 class="h2">Subtitle</h3>
+                            <h1 class="h1">Notez</h1>
+                            <h3 class="h2">Vos livres préférés</h3>
                             <p>
-                                Text normal
-                                <strong>Text en gras</strong>
+                                <strong>Et commentez les</strong>
                             </p>
                         </div>
                     </div>
@@ -51,12 +49,8 @@
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
-                            <h1 class="h1">Title</h1>
-                            <h3 class="h2">Subtitle</h3>
-                            <p>
-                                Text
-                                <strong>Text en gras</strong>
-                            </p>
+                            <h1 class="h1">Créez un compte</h1>
+                            <h3 class="h2">Dès maintenant</h3>
                         </div>
                     </div>
                 </div>
@@ -66,7 +60,7 @@
 </div>
 <!-- End Banner Hero -->
 
-<!-- Start Month Product -->
+<!-- Start 5 last Product -->
 <section class="MothProducts">
     <div class="container py-5">
         <div class="row text-center py-3">
@@ -97,20 +91,8 @@
                             </a>
                         </div>
                         <div class="card-body border-top">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                            </ul>
-                            <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$i]['idBook'];?>" class="h2 text-decoration-none text-dark"><?=$books[$i]['booTitle']?></a>
-                            <p class="card-text">
-                                <a href="../../../../../P_Web02/P_Web02/resources/booksExctract/<?=$books[$i]['booExtract'];?>"><?=$books[$i]['booExtract'];?></a>
-                            </p>
-                            <p class="text-muted">Reviews ($numbers)</p>
+                            <p class="text-black">Reviews : <?=$_SESSION['numberComments'][$i];?></p>
+                            <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$i]['idBook'];?>" class="h2 text-decoration-none text-dark mb-5"><?=$books[$i]['booTitle']?></a>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,10 @@
+<?php
+if(isset($_GET['search'])){
+    ?>
+    <p class="mt-3 ms-5">Recherche : <span class="font-weight-bold"><?=$_GET['search'];?></span></p>
+    <?php
+}
+?>
 <div class="row justify-content-around">
     <?php
     $books = $_SESSION['allBooks'];
@@ -13,28 +20,17 @@
                     </a>
                 </div>
                 <div class="card-body border-top">
-                    <!--Ajout les notes dynamiquement-->
-                    <ul class="list-unstyled d-flex justify-content-between">
-                        <li>
-                            <i class="text-warning fa fa-star"></i>
-                            <i class="text-warning fa fa-star"></i>
-                            <i class="text-warning fa fa-star"></i>
-                            <i class="text-muted fa fa-star"></i>
-                            <i class="text-muted fa fa-star"></i>
-                        </li>
-                    </ul>
-                    <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$key]['idBook'];?>" class="h2 text-decoration-none text-dark"><?=$books[$key]['booTitle'];?></a>
-                    <p class="card-text">
-                        <a href="../../../../../P_Web02/P_Web02/resources/booksExctract/<?=$books[$key]['booExtract'];?>"><?=$books[$key]['booExtract'];?></a>
-                    </p>
-                    <p class="text-muted">Reviews ($numbers)</p>
+                    <p class="text-muted">Reviews : <?=$_SESSION['numberComments'][$key];?></p>
+                    <a href="index.php?controller=detailsBook&action=detailOneBook&idBook=<?=$books[$key]['idBook'];?>" class="h2 text-decoration-none text-dark mb-5"><?=$books[$key]['booTitle'];?></a>
                 </div>
             </div>
         </div>
         <?php
         }
     }else{
-        echo"Pas de livre trouvés";
+        ?>
+        <h1 class="w-100 text-center mt-5 mb-5">Aucuns résultats ne correspond a votre recherche</h1>
+        <?php
     }
     unset($_SESSION['allBooks']);
     ?>

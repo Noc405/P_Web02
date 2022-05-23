@@ -22,7 +22,7 @@
                         <input type="text" name="notMark" class="inputForm" required><br>
                         <label for="notCommentary" class="mt-4">Commentaire :</label><br>
                         <textarea name="notCommentary" class="inputForm" required></textarea><br>
-                        <input type="submit" name="btnSubmit" value="Suivant" class="mt-5 btn-success">
+                        <input type="submit" name="btnSubmit" value="Noter" class="mt-5 btn-success">
                     </form>
                     <br>
                 </div>

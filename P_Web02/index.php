@@ -37,7 +37,7 @@ class MainController {
         }
         //Problem with the template, redirect to a page with correct header
         if(isset($_GET['q'])){
-            header("Location:index.php?controller=books&action=searchBook&search=".$_GET['q']);
+            header("Location:index.php?controller=browse&action=listBook&search=".$_GET['q']);
         }
 
 

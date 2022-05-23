@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow">
     <div class="container d-flexs justify-content-between align-items-center">
 
-        <a class="navbar-brand text-success2 logo h1 align-self-center" href="index.html">
-            Zay
+        <a class="navbar-brand text-success2 logo h1 align-self-center" href="index.php?controller=home&action=home">
+            Books & co
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
         <div class="w-100 pt-1 mb-5 text-right">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="index.php?controller=books&action=addBook&" method="get" class="modal-content modal-body border-0 p-0">
+        <form action="index.php?controller=browse&action=listBook" method="get" class="modal-content modal-body border-0 p-0">
             <div class="input-group mb-2">
                 <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
                 <button type="submit" class="input-group-text bg-success text-light" name="btnSubmit">

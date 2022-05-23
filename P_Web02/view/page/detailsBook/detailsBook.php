@@ -20,12 +20,14 @@
                         if(isset($_SESSION['average']) && isset($_SESSION['nbComments'])){
                         ?>
                         <p class="py-2">
-                            <i class="fa fa-star text-warning"></i>
+                            <!-- Stars of the books -->
+                            <!-- <i class="fa fa-star text-warning"></i> -->
                             <!-- <i class="fa fa-star text-warning"></i>
                             <i class="fa fa-star text-warning"></i>
                             <i class="fa fa-star-half text-warning"></i>
                             <i class="fa fa-star text-secondary"></i> -->
-                            <span class="list-inline-item text-dark">Rating <?=$_SESSION['average'];?> | <?=$_SESSION['nbComments'];?> Comments | <a href="index.php?controller=vote&action=voteBook&idBook=<?=$book[0]['idBook'];?>">Noter ce livre</a></span>
+                            <span class="list-inline-item text-dark">Rating <?=$_SESSION['average'];?> / 5</span>
+                            <p><?=$_SESSION['nbComments'];?> Comments | <a href="index.php?controller=vote&action=voteBook&idBook=<?=$book[0]['idBook'];?>">Noter ce livre</a></p>
                         </p>
                         <?php
                         }else{
@@ -48,7 +50,7 @@
                             </li>
                         </ul>
                         <h6>Résumé:</h6>
-                        <p><?=$book[0]['booAbstract']?></p>
+                        <p class="abstract"><?=$book[0]['booAbstract']?></p>
                         
 
                         <h6>Spécification:</h6>

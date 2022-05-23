@@ -3,9 +3,10 @@
  * ETML
  * Auteur : Emilien Charpié
  * Date: 08.04.2022
- * Controller for add the books
+ * Controller for do some actions in the books
  */
 
+ //Import the database file
 include_once ("data/database.php");
 
 class BooksController extends Controller {
@@ -20,6 +21,7 @@ class BooksController extends Controller {
         $action = $_GET['action'] . "Action";
 
         //Call a method in this class
+        //If the method doesn't exits, call a method that exits
         try {
             return call_user_func(array($this, $action));
         } catch (\Throwable $th) {
@@ -28,7 +30,7 @@ class BooksController extends Controller {
     }
     
     /**
-     * Get the form to add a new book
+     * Get the infos for the form and show the edit book page
      *
      * @return string
      */
@@ -38,7 +40,7 @@ class BooksController extends Controller {
         $authors = $database->getAllAuthors();
         //Get all the category
         $categories = $database->getAllCategories();
-        //Get all the Editors                   
+        //Get all the Editors                  
         $editors = $database->getAllEditors(); 
         // Get book info 
         if(isset($_GET['idBook'])){
@@ -71,12 +73,13 @@ class BooksController extends Controller {
             $_SESSION['editedBook'] = $_POST;
             unset($_SESSION['bookInfos']);
 
+            //Go to the second page of the edit action (add the image and the extracts)
             header("Location:index.php?controller=books&action=editBooksImageAndExtract&idBook=".$_GET['idBook']);
         }
     }
 
     /**
-     * Load the page for add the book image and extract
+     * Load the page for edit the book image and extract
      *
      * @return string
      */
@@ -91,7 +94,7 @@ class BooksController extends Controller {
     }
 
     /**
-     * Check the image and extract books
+     * Check the image and extract books for edit a book
      *
      * @return string
      */
@@ -108,7 +111,7 @@ class BooksController extends Controller {
                 //Check if the uploaded file have the good size
                 if($_FILES['picture']['size'] <= $maxSize)
                 {
-                    //Get the extention of the uploaded fil 
+                    //Get the extention of the uploaded file
                     $extentionUpload = strtolower(substr(strrchr($_FILES['picture']['name'], '.'), 1));
                     //Check if the extention is valid
                     if(in_array($extentionUpload, $extentionsValides))
@@ -136,7 +139,7 @@ class BooksController extends Controller {
                 }
             }
 
-            //Check if the user set the pdf fil 
+            //Check if the user set the pdf file
             if(isset($_FILES['extract']) && !empty($_FILES['extract']['name']))
             {
                 //Set the max size and the good extentions
@@ -146,7 +149,7 @@ class BooksController extends Controller {
                 //Check if the uploaded file have the good size
                 if($_FILES['extract']['size'] <= $maxSize)
                 {
-                    //Get the extention of the uploaded fil 
+                    //Get the extention of the uploaded file
                     $extentionUpload = strtolower(substr(strrchr($_FILES['extract']['name'], '.'), 1));
                     //Check if the extention is valid
                     if(in_array($extentionUpload, $extentionsValides))
@@ -175,9 +178,10 @@ class BooksController extends Controller {
             }
 
             if(isset($resultat)){
-                //If the files have been moved, insert the book in the db
+                //If the files have been moved, edit the book in the db
                 if($resultat[0] || $resultat[1])
                 {
+                    //Check that all the informations of the part ona are good 
                     if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\s|\'|.)+$/', $_SESSION['editedBook']['title']) && 
                     preg_match('/^[0-9]+$/', $_SESSION['editedBook']['nbPages']) && 
                     preg_match('/^.+$/', $_SESSION['editedBook']['abstract']) && 
@@ -186,7 +190,9 @@ class BooksController extends Controller {
                     preg_match('/^[0-9]+$/', $_SESSION['editedBook']['category']) && 
                     preg_match('/^[0-9]+$/', $_SESSION['editedBook']['editor']))
                     {
+                        //Get the pdf and picture file before the editing
                         $pdfAndPicture = $database->getBookInfoWithId($_GET['idBook']);
+                        //Edit the book if the user change the pdf and the image, just the pdf and just the image
                         if(isset($picture) && isset($PDF)){
                             //Edit the book
                             $database->editBook($_SESSION['editedBook']['title'], $picture, $_SESSION['editedBook']['nbPages'], $PDF, $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
@@ -209,7 +215,9 @@ class BooksController extends Controller {
                         header("Location:index.php?controller=books&action=editBook&idBook=".$_GET['idBook']."&error=1");
                     }
                 }
+            //If the user don't edit the pdf and the image
             }else{
+                //Check the regex of the first page
                 if(preg_match('/^([a-z]|[A-Z]|[0-9]|\-|\ |\'|.)+$/', $_SESSION['editedBook']['title']) && 
                 preg_match('/^[0-9]+$/', $_SESSION['editedBook']['nbPages']) && 
                 preg_match('/^.+$/', $_SESSION['editedBook']['abstract']) && 
@@ -218,7 +226,9 @@ class BooksController extends Controller {
                 preg_match('/^[0-9]+$/', $_SESSION['editedBook']['category']) && 
                 preg_match('/^[0-9]+$/', $_SESSION['editedBook']['editor']))
                 {
+                    //Get the books infos
                     $pdfAndPicture = $database->getBookInfoWithId($_GET['idBook']);
+                    //Edit the books
                     $database->editBook($_SESSION['editedBook']['title'], $pdfAndPicture[0]['booPicture'], $_SESSION['editedBook']['nbPages'], $pdfAndPicture[0]['booExtract'], $_SESSION['editedBook']['abstract'], $_SESSION['editedBook']['date'], $_SESSION['editedBook']['author'], $_SESSION['editedBook']['category'], $_SESSION['editedBook']['editor'], $_GET['idBook']);
     
                     // Unset the variables
@@ -464,24 +474,4 @@ class BooksController extends Controller {
             header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=" . $_GET['idBook']);
         }
     }
-
-    private function searchBookAction(){
-        
-        $database = new Database();
-
-        if(isset($_GET['search'])){
-            $books = $database->searchBook($_GET['search']);
-            $_SESSION['allBooks'] = $books;
-
-            //Charge the view file
-            $view = file_get_contents('view/page/browse/list.php');
-            ob_start();
-            eval('?>' . $view);
-            $content = ob_get_clean();
-
-            return $content;
-        }else{
-            header("Location:index.php?controller=home&action=home");
-        }
-      }
 }

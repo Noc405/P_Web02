@@ -3,7 +3,7 @@
  * ETML
  * Auteur : Noah Favre
  * Date: 11.04.2022
- * Controller for show a book with his details and rate it
+ * Controller for rate the books
  */
 
 include_once ("data/database.php");
@@ -59,12 +59,14 @@ class VoteController extends Controller {
                if(preg_match('/^([1-5]|[1-4]\.5){1}$/', $_POST["notMark"]))
                {
                     $database->voteBook($_POST['notMark'], $_POST['notCommentary'], $_GET['idBook'], $_SESSION['id']);
+                    header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=".$_GET['idBook']);
                }
                else{
                     header("Location:index.php?controller=vote&action=voteBook&idBook=" . $_GET['idBook'] . "&error=1");
                }
-           }
+            }else{
+                header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=".$_GET['idBook']);
+            }
         }
-        header("Location:index.php?controller=detailsBook&action=detailOneBook&idBook=".$_GET['idBook']);
     }
 }

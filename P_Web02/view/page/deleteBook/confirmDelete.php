@@ -6,7 +6,7 @@
                     <h3 class="text-success1">Êtes-vous sûr de vouloir supprimer ce livre ?</h1>
                     <div class="d-flex justify-content-around w-100 contentButtonDelete">
                         <form class="d-flex justify-content-around w-100" action="index.php?controller=books&action=deleteBook&idBook=<?=$_GET['idBook'];?>" method="post">
-                            <input type="submit" name="btnDelete" class="mt-5 btn btn-success" value="Suprimer">
+                            <input type="submit" name="btnDelete" class="mt-5 btn btn-success" value="Supprimer">
                             <input type="submit" name="btnBack" class="mt-5 btn btn-success" value="Garder">
                         </form>
                     </div>

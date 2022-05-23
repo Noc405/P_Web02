@@ -3,7 +3,7 @@
 class connexionValues {
     
     private $host = "localhost";
-    private $user = 'root';
+    private $user = 'userBooks';
     private $dbname = "db_books";
 
     public function getValues(){

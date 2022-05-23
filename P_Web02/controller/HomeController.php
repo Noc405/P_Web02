@@ -34,11 +34,18 @@ class HomeController extends Controller {
         // Set the model and get the informations
         $database = new database();
         $books = $database->getAllBooks();
-        
+
+        //Sort the array with the last added book in first
         usort($books, 'DescSort');
         
         $_SESSION['allBooks'] = $books;
         
+        //Get the number of the reviews
+        for ($i=0; $i < 5; $i++) { 
+            $notes = $database->getBookNotes($books[$i]['idBook']);
+            $_SESSION['numberComments'][$i] = count($notes);
+        }
+
         $view = file_get_contents('view/page/home/home.php');
         
         ob_start();

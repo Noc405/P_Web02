@@ -95,7 +95,7 @@ class Database {
     }
 
     /**
-     * Get all the name of a book
+     * Get all the name of the books
      */
     public function getAllBooksName(){
         // Get the books name
@@ -115,7 +115,7 @@ class Database {
      * Get the informations of a book with the id
      */
     public function getBookInfoWithId($id){
-        //Request for get the bok with an id
+        //Get the book with an id
         $sql = "SELECT * FROM t_book 
         INNER JOIN t_author on t_book.fkAuthor = t_author.idAuthor
         INNER JOIN t_editor on t_book.fkEditor = t_editor.idEditor
@@ -167,11 +167,10 @@ class Database {
     }
 
     /**
-     * Get the informations of a book with the title
+     * Get the notes of a book
      */
     public function getBookNotes($idBook){
-        
-        // Request for get the informations of a book with the title
+        //Get the notes of a book
         $queryRequest = "SELECT * FROM t_note WHERE fkBook = :idBook";
         
         // Array with binds
@@ -195,7 +194,7 @@ class Database {
      * Insert a book to the database
      */
     public function insertBook($title, $picture, $nbPage, $extract, $abstract, $date, $author, $categroy, $editor, $idUser){
-        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        //Insert a book
         $queryRequest = "INSERT INTO `t_book` (`idBook`, `booTitle`, `booPicture`, `booPage`, `booExtract`, `booAbstract`, `booDate`, `fkAuthor`, `fkCategory`, `fkEditor`, `fkUser`)
         VALUES (NULL, :title, :picture, :nbPage, :extract, :abstract, :date, :author, :category, :editor, :idUser);";
         // Set an array with the binds values
@@ -235,7 +234,7 @@ class Database {
      * Edit a book to the database
      */
     public function editBook($title, $picture, $nbPage, $extract, $abstract, $date, $author, $categroy, $editor, $idBook){
-        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        // Edit a book
         $queryRequest = "UPDATE `t_book` 
         SET `booTitle`=:title, `booPicture`=:picture, `booPage`=:nbPage, `booExtract`=:extract, `booAbstract`=:abstract, `booDate`=:date, `fkAuthor`=:author, `fkCategory`=:category, `fkEditor`=:editor
         WHERE idBook=:id";
@@ -260,7 +259,7 @@ class Database {
      * Insert a user to the database
      */
     public function insertUser($email, $password, $username){
-        // Recover the id, the firstname, the name and the nickname of all the teachers 
+        //Insert a user to the database
         $queryRequest = "INSERT INTO `t_user` (`useMail`, `usePassword`, `useUsername`, `useVote`)
         VALUES (:email, :password, :username, :vote);";
         // Set an array with the binds values
@@ -278,7 +277,7 @@ class Database {
      * Get all the users
      */
     public function getAllUser(){
-        // Recover the id, the username and the password of all users
+        // Recover all the users
         $queryRequest = "SELECT * FROM t_user";
         $rep = $this ->querySimpleExecute($queryRequest);
         //Set an array with the query return
@@ -312,7 +311,7 @@ class Database {
      * Get a user with his Id
      */
     public function getUserById($id){
-        // Recover id, the username and the password for each user with the email as parameter
+        //Get the user with his id
         $queryRequest = "SELECT * FROM t_user WHERE idUser = :id";
         // Set an array with the binds values
         $binds = array(
@@ -334,7 +333,7 @@ class Database {
      * Get all the authors
      */
     public function getAllAuthors(){
-        // Recover the id, the username and the password of all users
+        //Get all the authors
         $queryRequest = "SELECT * FROM t_author";
         $rep = $this ->querySimpleExecute($queryRequest);
         //Set an array with the query return
@@ -347,7 +346,7 @@ class Database {
      * Get all the categories
      */
     public function getAllCategories(){
-        // Recover the id, the username and the password of all users
+        //Get all the categories
         $queryRequest = "SELECT * FROM t_category";
         $rep = $this ->querySimpleExecute($queryRequest);
         //Set an array with the query return
@@ -360,7 +359,7 @@ class Database {
      * Get all the editors
      */
     public function getAllEditors(){
-        // Recover the id, the username and the password of all users
+        //Get all the editors
         $queryRequest = "SELECT * FROM t_editor";
         $rep = $this ->querySimpleExecute($queryRequest);
         //Set an array with the query return
@@ -380,9 +379,9 @@ class Database {
             "id" => array(
                 "value" => $id,
                 "type" => PDO::PARAM_INT)
-            );
+        );
         // Execute the request
-        $rep = $this->queryPrepareExecute($queryRequest, $binds);
+        $this->queryPrepareExecute($queryRequest, $binds);
     }
 
     /**
@@ -423,8 +422,8 @@ class Database {
      * Search a book
     */
     public function searchBook($search){
-        // Vote the book that have the same id than $id
-        $queryRequest = "SELECT * FROM t_book WHERE booTitle = :search";
+        // Search the book
+        $queryRequest = 'SELECT * FROM t_book WHERE booTitle LIKE :search';
 
         // Set an array with the binds values
         $binds = array (
@@ -432,7 +431,12 @@ class Database {
         );
 
         // Execute the request
-        $books = $this ->queryPrepareExecute($queryRequest, $binds);
+        $rep = $this ->queryPrepareExecute($queryRequest, $binds);
+
+        //Format the result in an array
+        $books = $this->formatData($rep);
+
+        return $books;
     }
 }
 ?>
