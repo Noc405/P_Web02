@@ -32,7 +32,8 @@ USE `db_books`;
 
 DROP USER IF EXISTS 'userBooks'@'localhost';
 CREATE USER 'userBooks'@'localhost' IDENTIFIED BY '.Etml-';
-GRANT ALL PRIVILEGES ON `db_books` TO 'userBooks'@'localhost';
+GRANT ALL PRIVILEGES ON `db_books`.* TO 'userBooks'@'localhost';
+FLUSH PRIVILEGES
 
 -- --------------------------------------------------------
 
@@ -93,7 +94,7 @@ CREATE TABLE `t_book` (
 --
 
 INSERT INTO `t_book` (`idBook`, `booTitle`, `booPicture`, `booPage`, `booExtract`, `booAbstract`, `booDate`, `booAddDate`, `fkAuthor`, `fkCategory`, `fkEditor`, `fkUser`) VALUES
-(2, 'L\'Étrange Cas du docteur Jekyll et de M. Hyde', 'DrJekyll.jpg', 142, 'DrHide.pdf', 'Comment l\'excellent docteur Jekyll, éminent scientifique et membre de la meilleure société londonienne, a-t-il pu se lier avec M. Hyde, un homme violent et sans éducation ? Ses amis s\'inquiètent : n\'a-t-on pas vu le sinistre M. Hyde se glisser, aux petites heures du matin, chez le docteur, en utilisant sa propre clef ? Il ne fait aucun doute que le docteur Jekyll cache un effroyable secret...', '1886', '2022-04-08 10:21:00', 2, 15, 3, 1),
+(2, 'L\'Etrange Cas du docteur Jekyll et de M. Hyde', 'DrJekyll.jpg', 142, 'DrHide.pdf', 'Comment l\'excellent docteur Jekyll, éminent scientifique et membre de la meilleure société londonienne, a-t-il pu se lier avec M. Hyde, un homme violent et sans éducation ? Ses amis s\'inquiètent : n\'a-t-on pas vu le sinistre M. Hyde se glisser, aux petites heures du matin, chez le docteur, en utilisant sa propre clef ? Il ne fait aucun doute que le docteur Jekyll cache un effroyable secret...', '1886', '2022-04-08 10:21:00', 2, 15, 3, 1),
 (3, 'Robinson Crusoé', 'RobinsonCrusoe.jpg', 588, 'Defoe-Robinson.pdf', 'Quand il embarque à dix-neuf ans, contre l\'avis de son père, Robinson ignore encore l\'incroyable destin qui l\'attend. Seul rescapé d\'un naufrage, perdu sur une île déserte, il va devoir apprendre à survivre au milieu d\'une nature hostile... Inspiré d\'une histoire vraie, un chef-d\'oeuvre du roman d\'aventures en version abrégée.', '1719', '2022-04-08 10:21:00', 3, 33, 4, 1),
 (4, 'Du côté de chez Swann', 'LaRechercheDuTempsPerdu_1.jpg', 720, 'LaRechercheDuTempsPerdu_1.pdf', 'Du côté de chez Swann relate les jours heureux qu\'il a passés à Combray, avec sa famille et leurs amis, alors qu\'il était enfant. Il est amoureux de Gilberte la fille de Monsieur Swann. Le livre est divisé en trois parties. Dans \"Combray\", le narrateur parle de sa relation avec sa mère. Il réclame toujours sa présence avant de se coucher. Il évoque aussi ses premières lectures (George Sand notamment). On voit que le narrateur est fasciné par la littérature. Il étudie aussi beaucoup les voisins, les Guermantes.', '1913', '2022-04-08 10:21:00', 4, 44, 6, 1),
 (5, 'À l’ombre des jeunes filles en fleurs', 'LaRechercheDuTempsPerdu_2.jpg', 647, 'LaRechercheDuTempsPerdu_2.pdf', 'Tout d\'un coup, dans le petit chemin creux, je m\'arrêtai touché au coeur par un doux souvenir d\'enfance : je venais de reconnaître, aux feuilles découpées et brillantes qui s\'avançaient sur le seuil, un buisson d\'aubépines défleuries, hélas, depuis la fin du printemps. Autour de moi flottait une atmosphère d\'anciens mois de Marie, d\'après-midi du dimanche, de croyances, d\'erreurs oubliées. J\'aurais voulu la saisir. Je m\'arrêtai une seconde et Andrée, avec une divination charmante, me laissa causer un instant avec les feuilles de l\'arbuste. Je leur demandai des nouvelles des fleurs, ces fleurs de l\'aubépine pareilles à de gaies jeunes filles étourdies, coquettes et pieuses. \"Ces demoiselles sont parties depuis déjà longtemps\", me disaient les feuilles.', '1918', '2022-04-08 10:21:00', 4, 44, 6, 1),
